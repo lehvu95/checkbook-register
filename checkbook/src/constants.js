@@ -10,6 +10,7 @@ export const TRANSFER = 'transfer';
 
 // mock data
 export const mockData = {
+  current: 'checking',
   checking: {
     total: 500,
     transactions: [

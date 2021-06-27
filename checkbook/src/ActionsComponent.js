@@ -1,9 +1,10 @@
-import React, {useEffect, useState, useReducer} from 'react';
+import React, {useState} from 'react';
 import ButtonGroup from './ButtonGroup';
 import { DEPOSIT, WITHDRAW, TRANSFER, ACTION_BTNS } from './constants';
 import InputForm from './InputForm';
 
 export const ActionsComponent = props => {
+  const {addEntry} = props;
   const [selectedAction, setSelectedAction] = useState(DEPOSIT);
 
   const selectAction = action => {
@@ -35,6 +36,7 @@ export const ActionsComponent = props => {
     />
     <InputForm
       type={selectedAction}
+      addEntry={addEntry}
     />
   </div>;
 }

@@ -1,10 +1,16 @@
-import React, {useEffect, useState, useReducer} from 'react';
+import React, {useEffect, useState} from 'react';
 import ButtonGroup from './ButtonGroup';
 import AccountTable from './AccountTable';
-import {mockData, ACCOUNT_BTNS, CHECKING, SAVINGS} from './constants';
+import {ACCOUNT_BTNS, CHECKING, SAVINGS} from './constants';
 
 export const AccountsComponent = props => {
-  const [displayedAccount, setDisplayedAccount] = useState(CHECKING);
+  const {data} = props;
+  const {current} = data;
+  const [displayedAccount, setDisplayedAccount] = useState(current);
+
+  useEffect(() => {
+    setDisplayedAccount(current);
+  }, [data, current]);
   
   const selectAccount = account => {
     setDisplayedAccount(account);
@@ -29,6 +35,7 @@ export const AccountsComponent = props => {
       items={accountButtons}
     />
     <AccountTable
+      data={data}
       account={displayedAccount}
     />
   </div>;

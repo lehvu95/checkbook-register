@@ -1,5 +1,5 @@
-import React, {useEffect, useState, useReducer} from 'react';
-import {mockData, DEPOSIT, TRANSFER, WITHDRAW, CHECKING, SAVINGS, EXTERNAL} from './constants';
+import React, {useEffect, useReducer} from 'react';
+import {DEPOSIT, WITHDRAW, CHECKING, SAVINGS, EXTERNAL} from './constants';
 
 const inputReducer = (state, event) => {
   if (event.reset) {
@@ -17,7 +17,7 @@ const inputReducer = (state, event) => {
 }
 
 export const InputForm = props => {
-  const {type: actionType} = props;
+  const {type: actionType, addEntry} = props;
 
   const [inputData, setInputData] = useReducer(inputReducer, {type: actionType});
 
@@ -37,36 +37,31 @@ export const InputForm = props => {
     const {amount, from, to, type} = txn;
 
     const newAmount = Number(amount);
-    const today = getDate();
+    if (!isNaN(newAmount)) {
+      const today = getDate();
 
-    const item = {
-      type,
-      amount: newAmount,
-      date: today,
-    }
+      const item = {
+        type,
+        amount: newAmount,
+        date: today,
+      }
 
-    switch (type) {
-      case WITHDRAW:
-        mockData[from].transactions.push(item);
-        mockData[from].total = mockData[from].total - newAmount;
-        break;
-      case DEPOSIT:
-        mockData[to].transactions.push(item);
-        mockData[to].total = mockData[to].total + newAmount;
-        break;
-      default:
-        item.to = to;
-        item.from = from;
-        if (from !== EXTERNAL) {
-          mockData[from].transactions.push(item);
-          mockData[from].total = mockData[from].total - newAmount;
-        }
-        if (to !== EXTERNAL) {
-          mockData[to].transactions.push(item);
-          mockData[to].total = mockData[to].total + newAmount;
-        }
+      switch (type) {
+        case WITHDRAW:
+          item.from = from;
+          break;
+        case DEPOSIT:
+          item.to = to;
+          break;
+        default:
+          item.to = to;
+          item.from = from;
+      }
+
+      addEntry(type, item);
+    } else {
+      alert("Input must be a number.");
     }
-    console.log(mockData);
   }
 
   const handleSubmit = event => {
@@ -123,7 +118,7 @@ export const InputForm = props => {
     }
   }
 
-  const getDisableButton = (amount, to, from) => {
+  const getDisableButton = (amount = '', to = '', from = '') => {
     switch (actionType) {
       case WITHDRAW:
         return amount === '' || from === '';

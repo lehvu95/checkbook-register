@@ -1,15 +1,9 @@
-import React, {useEffect, useState, useReducer} from 'react';
+import React from 'react';
 import AccountRow from './AccountRow';
-import {mockData} from './constants';
 
 export const AccountTable = props => {
-  const {account} = props;
-
-  useEffect(() => {}, [
-    mockData[account].total,
-  ]);
-  
-  const {total, transactions} = mockData[account];
+  const {data, account} = props;
+  const {total, transactions} = data[account];
 
   return <table>
     <AccountRow account={account} amount={total} total/>
