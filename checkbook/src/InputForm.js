@@ -38,29 +38,33 @@ export const InputForm = props => {
 
     const newAmount = Number(amount);
     if (!isNaN(newAmount)) {
-      const today = getDate();
+      if(newAmount < 0) {
+        alert("Please use a postive number.");
+      } else {
+        const today = getDate();
 
-      const item = {
-        type,
-        amount: newAmount,
-        date: today,
+        const item = {
+          type,
+          amount: newAmount,
+          date: today,
+        }
+
+        switch (type) {
+          case WITHDRAW:
+            item.from = from;
+            break;
+          case DEPOSIT:
+            item.to = to;
+            break;
+          default:
+            item.to = to;
+            item.from = from;
+        }
+
+        addEntry(type, item);
       }
-
-      switch (type) {
-        case WITHDRAW:
-          item.from = from;
-          break;
-        case DEPOSIT:
-          item.to = to;
-          break;
-        default:
-          item.to = to;
-          item.from = from;
-      }
-
-      addEntry(type, item);
     } else {
-      alert("Input must be a number.");
+      alert("Please input a number.");
     }
   }
 
